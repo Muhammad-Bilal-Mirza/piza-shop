@@ -28,7 +28,7 @@ const PIZZAS = [
     name: "The Upside",
     description: "Our signature pie with a sourdough crust, homemade mozzarella, and a secret sauce that'll flip your world.",
     price: "$24",
-    image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=1000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop",
     tags: ["Signature", "Sourdough"]
   },
   {
@@ -36,7 +36,7 @@ const PIZZAS = [
     name: "The Pepperoni Flip",
     description: "Crispy cups of pepperoni, fresh basil, and a drizzle of hot honey on our fermented dough.",
     price: "$26",
-    image: "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?q=80&w=1000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=1000&auto=format&fit=crop",
     tags: ["Best Seller", "Spicy"]
   },
   {
@@ -44,7 +44,7 @@ const PIZZAS = [
     name: "White Truffle",
     description: "Creamy ricotta, roasted garlic, and shaved white truffles. An elegant slice of heaven.",
     price: "$28",
-    image: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=1000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=1000&auto=format&fit=crop",
     tags: ["Premium", "Vegetarian"]
   }
 ];
@@ -97,20 +97,34 @@ export default function App() {
 
       {/* Hero Section */}
       <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-upside-offwhite">
+        {/* Immersive Background Image */}
+        <div className="absolute inset-0 z-0 opacity-[0.1] pointer-events-none">
+          <img 
+            src="https://images.unsplash.com/photo-1594000199163-2479a48df418?q=80&w=2000&auto=format&fit=crop" 
+            alt="Busy Pizzeria" 
+            className="w-full h-full object-cover grayscale"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-upside-offwhite/80" />
+        </div>
+
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
           <motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <motion.span 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="inline-block text-upside-red font-display font-black uppercase tracking-[0.3em] text-sm mb-6"
-            >
-              More Than Just a Slice
-            </motion.span>
+            <div className="flex items-center gap-4 mb-6">
+              <motion.span 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="text-upside-red font-display font-black uppercase tracking-[0.3em] text-sm"
+              >
+                More Than Just a Slice
+              </motion.span>
+              <div className="h-[2px] w-12 bg-upside-red/30" />
+            </div>
             <h1 className="text-7xl md:text-9xl font-black uppercase leading-[0.85] tracking-tighter mb-8 text-upside-black">
               Very <br />
               <span className="text-upside-red">Special</span> <br />
@@ -120,13 +134,23 @@ export default function App() {
               Flipping the New York pizza game on its head with 72-hour sourdough crust and homemade mozzarella.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6">
+            <div className="flex flex-col sm:flex-row gap-6 items-center">
               <button className="bg-upside-red text-white px-10 py-5 rounded-full font-display font-black uppercase text-lg tracking-widest hover:bg-upside-black transition-all shadow-xl shadow-upside-red/20">
                 Order Now
               </button>
-              <button className="bg-transparent border-2 border-upside-black text-upside-black px-10 py-5 rounded-full font-display font-black uppercase text-lg tracking-widest hover:bg-upside-black hover:text-white transition-all">
-                Our Story
-              </button>
+              <div className="flex items-center gap-4 group cursor-pointer">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-upside-red/20 group-hover:border-upside-red transition-colors">
+                  <img 
+                    src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?q=80&w=200&auto=format&fit=crop" 
+                    alt="Chef" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <button className="bg-transparent text-upside-black font-display font-black uppercase text-lg tracking-widest hover:text-upside-red transition-all">
+                  Our Story
+                </button>
+              </div>
             </div>
           </motion.div>
 
@@ -138,7 +162,7 @@ export default function App() {
           >
             <div className="relative z-10">
               <img 
-                src="https://images.unsplash.com/photo-1574071318508-1cdbad80ad38?q=80&w=1000&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1000&auto=format&fit=crop" 
                 alt="Signature Pizza" 
                 className="w-full h-auto drop-shadow-[0_35px_35px_rgba(102,17,28,0.3)]"
                 referrerPolicy="no-referrer"
@@ -148,7 +172,7 @@ export default function App() {
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-10 -right-10 w-32 h-32 bg-upside-yellow rounded-full flex items-center justify-center text-upside-black font-display font-black uppercase text-[10px] text-center p-4 leading-tight z-20"
+              className="absolute -top-10 -right-10 w-32 h-32 bg-upside-yellow rounded-full flex items-center justify-center text-upside-black font-display font-black uppercase text-[10px] text-center p-4 leading-tight z-20 shadow-xl"
             >
               Freshly Baked <br /> Every Day
             </motion.div>
@@ -237,7 +261,7 @@ export default function App() {
               className="relative z-10 rounded-3xl overflow-hidden shadow-2xl"
             >
               <img 
-                src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?q=80&w=1000&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?q=80&w=1000&auto=format&fit=crop" 
                 alt="Pizza Making" 
                 className="w-full h-auto"
                 referrerPolicy="no-referrer"
