@@ -17,7 +17,8 @@ import {
   Mail,
   Phone,
   Send,
-  Leaf
+  Leaf,
+  Star
 } from "lucide-react";
 import { useRef } from "react";
 
@@ -27,7 +28,7 @@ const PIZZAS = [
     name: "The Upside",
     description: "Our signature pie with a sourdough crust, homemade mozzarella, and a secret sauce that'll flip your world.",
     price: "$24",
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=1000&auto=format&fit=crop",
     tags: ["Signature", "Sourdough"]
   },
   {
@@ -35,7 +36,7 @@ const PIZZAS = [
     name: "The Pepperoni Flip",
     description: "Crispy cups of pepperoni, fresh basil, and a drizzle of hot honey on our fermented dough.",
     price: "$26",
-    image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?q=80&w=1000&auto=format&fit=crop",
     tags: ["Best Seller", "Spicy"]
   },
   {
@@ -95,111 +96,70 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center justify-center pt-20 overflow-hidden bg-upside-black">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ 
-                x: Math.random() * 100 + "%", 
-                y: Math.random() * 100 + "%",
-                rotate: Math.random() * 360
-              }}
-              animate={{ 
-                y: [null, "-20%", "120%"],
-                rotate: [null, 360]
-              }}
-              transition={{ 
-                duration: 15 + Math.random() * 10, 
-                repeat: Infinity, 
-                ease: "linear" 
-              }}
-              className="absolute text-upside-yellow/10"
+      <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-upside-offwhite">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
+          <motion.div
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="inline-block text-upside-red font-display font-black uppercase tracking-[0.3em] text-sm mb-6"
             >
-              <Leaf size={40 + Math.random() * 60} />
+              More Than Just a Slice
+            </motion.span>
+            <h1 className="text-7xl md:text-9xl font-black uppercase leading-[0.85] tracking-tighter mb-8 text-upside-black">
+              Very <br />
+              <span className="text-upside-red">Special</span> <br />
+              <span className="text-stroke text-upside-black">Pizza</span>
+            </h1>
+            <p className="text-xl md:text-2xl font-display font-medium max-w-lg text-upside-black/70 mb-12">
+              Flipping the New York pizza game on its head with 72-hour sourdough crust and homemade mozzarella.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6">
+              <button className="bg-upside-red text-white px-10 py-5 rounded-full font-display font-black uppercase text-lg tracking-widest hover:bg-upside-black transition-all shadow-xl shadow-upside-red/20">
+                Order Now
+              </button>
+              <button className="bg-transparent border-2 border-upside-black text-upside-black px-10 py-5 rounded-full font-display font-black uppercase text-lg tracking-widest hover:bg-upside-black hover:text-white transition-all">
+                Our Story
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotate: 15 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
+            <div className="relative z-10">
+              <img 
+                src="https://images.unsplash.com/photo-1574071318508-1cdbad80ad38?q=80&w=1000&auto=format&fit=crop" 
+                alt="Signature Pizza" 
+                className="w-full h-auto drop-shadow-[0_35px_35px_rgba(102,17,28,0.3)]"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            {/* Decorative Elements */}
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-10 -right-10 w-32 h-32 bg-upside-yellow rounded-full flex items-center justify-center text-upside-black font-display font-black uppercase text-[10px] text-center p-4 leading-tight z-20"
+            >
+              Freshly Baked <br /> Every Day
             </motion.div>
-          ))}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-upside-red/5 rounded-full blur-3xl -z-10" />
+          </motion.div>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center z-10 px-4"
-        >
-          <div className="relative inline-block">
-            <motion.h1 
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-7xl md:text-[14rem] font-black uppercase leading-[0.75] tracking-tighter mb-4 text-white mix-blend-difference"
-            >
-              Very <br />
-              <span className="text-upside-red relative">
-                Special
-                <motion.span 
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ delay: 1, duration: 0.8 }}
-                  className="absolute bottom-4 left-0 h-4 bg-upside-yellow -z-10"
-                />
-              </span>
-            </motion.h1>
-          </div>
-          
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-xl md:text-2xl font-display font-medium max-w-2xl mx-auto mt-12 text-white/80"
-          >
-            More than just a slice. We're flipping the New York pizza game on its head with sourdough crust and homemade mozzarella.
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="mt-12 flex flex-col md:flex-row gap-6 justify-center items-center"
-          >
-            <button className="group relative bg-upside-red text-white px-12 py-6 rounded-full font-display font-black uppercase text-xl tracking-widest overflow-hidden transition-all shadow-2xl shadow-upside-red/40">
-              <span className="relative z-10">Pickup or Delivery</span>
-              <motion.div 
-                className="absolute inset-0 bg-white"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: "0%" }}
-                transition={{ duration: 0.3 }}
-                style={{ mixBlendMode: 'difference' }}
-              />
-            </button>
-            <button className="bg-transparent border-2 border-white text-white px-12 py-6 rounded-full font-display font-black uppercase text-xl tracking-widest hover:bg-white hover:text-upside-black transition-all">
-              View Menu
-            </button>
-          </motion.div>
-        </motion.div>
-
-        {/* Floating Pizza Background */}
-        <motion.div 
-          style={{ rotate, scale: useTransform(scrollYProgress, [0, 0.5], [1, 1.5]) }}
-          className="absolute -right-20 -bottom-20 md:-right-40 md:-bottom-40 w-[500px] md:w-[1000px] opacity-30 pointer-events-none"
-        >
-          <img 
-            src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop" 
-            alt="Pizza Background" 
-            className="w-full h-full object-contain"
-            referrerPolicy="no-referrer"
-          />
-        </motion.div>
-
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 text-white"
-        >
-          <span className="text-xs font-display font-bold uppercase tracking-widest">Scroll Down</span>
-          <ArrowDown className="w-4 h-4" />
-        </motion.div>
+        {/* Background Text */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none select-none opacity-[0.03] whitespace-nowrap">
+          <span className="text-[25rem] font-black uppercase leading-none">UPSIDE PIZZA UPSIDE PIZZA</span>
+        </div>
       </section>
 
       {/* Marquee Section */}
@@ -485,4 +445,5 @@ export default function App() {
     </div>
   );
 }
+
 
