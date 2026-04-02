@@ -18,9 +18,11 @@ import {
   Phone,
   Send,
   Leaf,
-  Star
+  Star,
+  Sun,
+  Moon
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const PIZZAS = [
   {
@@ -57,6 +59,16 @@ const LOCATIONS = [
 
 export default function App() {
   const containerRef = useRef(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -65,9 +77,9 @@ export default function App() {
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
 
   return (
-    <div ref={containerRef} className="relative min-h-screen overflow-x-hidden selection:bg-upside-yellow selection:text-upside-black">
+    <div ref={containerRef} className={`relative min-h-screen overflow-x-hidden selection:bg-upside-yellow selection:text-upside-black transition-colors duration-500 ${isDarkMode ? 'bg-upside-black text-white' : 'bg-upside-offwhite text-upside-black'}`}>
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-upside-offwhite/80 backdrop-blur-md border-b border-upside-black/5">
+      <nav className={`fixed top-0 left-0 w-full z-50 px-6 py-4 flex justify-between items-center backdrop-blur-md border-b transition-colors duration-500 ${isDarkMode ? 'bg-upside-black/80 border-white/10' : 'bg-upside-offwhite/80 border-upside-black/5'}`}>
         <div className="flex items-center gap-2 group cursor-pointer">
           <motion.div 
             whileHover={{ rotate: 180 }}
@@ -76,27 +88,38 @@ export default function App() {
           >
             <Pizza className="text-white w-6 h-6" />
           </motion.div>
-          <span className="text-2xl font-display font-black tracking-tighter uppercase">Upside</span>
+          <span className={`text-2xl font-display font-black tracking-tighter uppercase ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Upside</span>
         </div>
         
         <div className="hidden md:flex items-center gap-8 font-display font-semibold uppercase text-sm tracking-widest">
-          <a href="#menu" className="hover:text-upside-red transition-colors">Menu</a>
-          <a href="#locations" className="hover:text-upside-red transition-colors">Locations</a>
-          <a href="#about" className="hover:text-upside-red transition-colors">About</a>
-          <a href="#contact" className="hover:text-upside-red transition-colors">Contact</a>
+          <a href="#menu" className={`hover:text-upside-red transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black'}`}>Menu</a>
+          <a href="#locations" className={`hover:text-upside-red transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black'}`}>Locations</a>
+          <a href="#about" className={`hover:text-upside-red transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black'}`}>About</a>
+          <a href="#contact" className={`hover:text-upside-red transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black'}`}>Contact</a>
         </div>
 
-        <motion.button 
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-upside-black text-white px-6 py-2.5 rounded-full font-display font-bold uppercase text-sm tracking-wider hover:bg-upside-red transition-colors flex items-center gap-2"
-        >
-          Order Now <ShoppingBag className="w-4 h-4" />
-        </motion.button>
+        <div className="flex items-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className={`p-2 rounded-full transition-colors ${isDarkMode ? 'bg-white/10 text-upside-yellow' : 'bg-upside-black/5 text-upside-black'}`}
+          >
+            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </motion.button>
+
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-upside-black text-white px-6 py-2.5 rounded-full font-display font-bold uppercase text-sm tracking-wider hover:bg-upside-red transition-colors flex items-center gap-2 dark:bg-upside-red dark:hover:bg-white dark:hover:text-upside-red"
+          >
+            Order Now <ShoppingBag className="w-4 h-4" />
+          </motion.button>
+        </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center pt-20 overflow-hidden bg-upside-offwhite">
+      <section className={`relative h-screen flex items-center pt-20 overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-upside-black' : 'bg-upside-offwhite'}`}>
         {/* Immersive Background Image */}
         <div className="absolute inset-0 z-0 opacity-[0.1] pointer-events-none">
           <img 
@@ -105,7 +128,7 @@ export default function App() {
             className="w-full h-full object-cover grayscale"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-upside-offwhite/80" />
+          <div className={`absolute inset-0 transition-colors duration-500 ${isDarkMode ? 'bg-upside-black/80' : 'bg-upside-offwhite/80'}`} />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
@@ -113,24 +136,25 @@ export default function App() {
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-12"
           >
             <div className="flex items-center gap-4 mb-6">
               <motion.span 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-upside-red font-display font-black uppercase tracking-[0.3em] text-sm"
+                className="text-upside-red font-display font-black uppercase tracking-[0.3em] text-sm dark:text-upside-yellow"
               >
                 More Than Just a Slice
               </motion.span>
-              <div className="h-[2px] w-12 bg-upside-red/30" />
+              <div className={`h-[2px] w-12 transition-colors ${isDarkMode ? 'bg-upside-yellow/30' : 'bg-upside-red/30'}`} />
             </div>
-            <h1 className="text-7xl md:text-9xl font-black uppercase leading-[0.85] tracking-tighter mb-8 text-upside-black">
+            <h1 className={`text-7xl md:text-9xl font-black uppercase leading-[0.85] tracking-tighter mb-8 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>
               Very <br />
-              <span className="text-upside-red">Special</span> <br />
-              <span className="text-stroke text-upside-black">Pizza</span>
+              <span className="text-upside-red dark:text-upside-yellow">Special</span> <br />
+              <span className={`text-stroke ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Pizza</span>
             </h1>
-            <p className="text-xl md:text-2xl font-display font-medium max-w-lg text-upside-black/70 mb-12">
+            <p className={`text-xl md:text-2xl font-display font-medium max-w-lg mb-12 transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black/70'}`}>
               Flipping the New York pizza game on its head with 72-hour sourdough crust and homemade mozzarella.
             </p>
             
@@ -200,59 +224,61 @@ export default function App() {
       </div>
 
       {/* Menu Section */}
-      <section id="menu" className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div>
-            <h2 className="text-5xl md:text-7xl font-black uppercase leading-none mb-4">Signature <br /><span className="text-stroke text-upside-black">Pies</span></h2>
-            <p className="text-lg text-upside-black/60 max-w-md">Each pie is crafted with our 72-hour fermented sourdough and topped with the freshest ingredients.</p>
+      <section id="menu" className={`py-24 px-6 transition-colors duration-500 ${isDarkMode ? 'bg-upside-black' : 'bg-white'}`}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div>
+              <h2 className={`text-5xl md:text-7xl font-black uppercase leading-none mb-4 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Signature <br /><span className={`text-stroke ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Pies</span></h2>
+              <p className={`text-lg max-w-md transition-colors ${isDarkMode ? 'text-white/60' : 'text-upside-black/60'}`}>Each pie is crafted with our 72-hour fermented sourdough and topped with the freshest ingredients.</p>
+            </div>
+            <button className={`flex items-center gap-2 font-display font-bold uppercase tracking-widest hover:text-upside-red transition-colors group ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>
+              See Full Menu <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
-          <button className="flex items-center gap-2 font-display font-bold uppercase tracking-widest hover:text-upside-red transition-colors group">
-            See Full Menu <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {PIZZAS.map((pizza, index) => (
-            <motion.div 
-              key={pizza.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="group cursor-pointer"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl mb-6">
-                <img 
-                  src={pizza.image} 
-                  alt={pizza.name} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute top-4 left-4 flex gap-2">
-                  {pizza.tags.map(tag => (
-                    <span key={tag} className="bg-white/90 backdrop-blur-sm text-upside-black px-3 py-1 rounded-full text-[10px] font-display font-black uppercase tracking-widest">
-                      {tag}
-                    </span>
-                  ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {PIZZAS.map((pizza, index) => (
+              <motion.div 
+                key={pizza.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group cursor-pointer"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden rounded-3xl mb-6">
+                  <img 
+                    src={pizza.image} 
+                    alt={pizza.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    {pizza.tags.map(tag => (
+                      <span key={tag} className="bg-white/90 backdrop-blur-sm text-upside-black px-3 py-1 rounded-full text-[10px] font-display font-black uppercase tracking-widest">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-upside-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
+                    <button className="w-full bg-white text-upside-black py-4 rounded-xl font-display font-bold uppercase tracking-widest">
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-upside-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
-                  <button className="w-full bg-white text-upside-black py-4 rounded-xl font-display font-bold uppercase tracking-widest">
-                    Add to Cart
-                  </button>
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className={`text-2xl font-black uppercase tracking-tight transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>{pizza.name}</h3>
+                  <span className={`text-xl font-display font-bold transition-colors ${isDarkMode ? 'text-upside-yellow' : 'text-upside-red'}`}>{pizza.price}</span>
                 </div>
-              </div>
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-2xl font-black uppercase tracking-tight">{pizza.name}</h3>
-                <span className="text-xl font-display font-bold text-upside-red">{pizza.price}</span>
-              </div>
-              <p className="text-upside-black/60 leading-relaxed">{pizza.description}</p>
-            </motion.div>
-          ))}
+                <p className={`transition-colors ${isDarkMode ? 'text-white/60' : 'text-upside-black/60'} leading-relaxed`}>{pizza.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="about" className="bg-upside-yellow py-24 px-6">
+      <section id="about" className={`py-24 px-6 transition-colors duration-500 ${isDarkMode ? 'bg-upside-red' : 'bg-upside-yellow'}`}>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <motion.div 
@@ -267,39 +293,39 @@ export default function App() {
                 referrerPolicy="no-referrer"
               />
             </motion.div>
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-upside-red rounded-full -z-0 flex items-center justify-center text-white font-display font-black uppercase text-center text-sm leading-tight rotate-12">
+            <div className={`absolute -top-10 -left-10 w-40 h-40 rounded-full -z-0 flex items-center justify-center text-white font-display font-black uppercase text-center text-sm leading-tight rotate-12 transition-colors ${isDarkMode ? 'bg-upside-yellow text-upside-black' : 'bg-upside-red'}`}>
               72 Hour <br /> Sourdough
             </div>
           </div>
           
           <div>
-            <h2 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-8">What Makes Us <br /><span className="text-white">Upside</span></h2>
+            <h2 className={`text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-8 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>What Makes Us <br /><span className={`${isDarkMode ? 'text-upside-yellow' : 'text-white'}`}>Upside</span></h2>
             <div className="space-y-8">
               <div className="flex gap-6">
-                <div className="bg-upside-black p-4 rounded-2xl h-fit">
+                <div className={`p-4 rounded-2xl h-fit transition-colors ${isDarkMode ? 'bg-white/10' : 'bg-upside-black'}`}>
                   <Pizza className="text-upside-yellow w-8 h-8" />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black uppercase mb-2">Sourdough Crust</h4>
-                  <p className="text-upside-black/70">Our dough is naturally leavened for 72 hours, resulting in a crust that's light, airy, and packed with flavor.</p>
+                  <h4 className={`text-xl font-black uppercase mb-2 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Sourdough Crust</h4>
+                  <p className={`transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black/70'}`}>Our dough is naturally leavened for 72 hours, resulting in a crust that's light, airy, and packed with flavor.</p>
                 </div>
               </div>
               <div className="flex gap-6">
-                <div className="bg-upside-black p-4 rounded-2xl h-fit">
+                <div className={`p-4 rounded-2xl h-fit transition-colors ${isDarkMode ? 'bg-white/10' : 'bg-upside-black'}`}>
                   <Clock className="text-upside-yellow w-8 h-8" />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black uppercase mb-2">Open Late</h4>
-                  <p className="text-upside-black/70">Whether it's a lunch rush or a 2 AM craving, we're serving hot slices when you need them most.</p>
+                  <h4 className={`text-xl font-black uppercase mb-2 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Open Late</h4>
+                  <p className={`transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black/70'}`}>Whether it's a lunch rush or a 2 AM craving, we're serving hot slices when you need them most.</p>
                 </div>
               </div>
               <div className="flex gap-6">
-                <div className="bg-upside-black p-4 rounded-2xl h-fit">
+                <div className={`p-4 rounded-2xl h-fit transition-colors ${isDarkMode ? 'bg-white/10' : 'bg-upside-black'}`}>
                   <MapPin className="text-upside-yellow w-8 h-8" />
                 </div>
                 <div>
-                  <h4 className="text-xl font-black uppercase mb-2">New York Heart</h4>
-                  <p className="text-upside-black/70">Born in the streets of NYC, we bring that authentic energy to every single pie we bake.</p>
+                  <h4 className={`text-xl font-black uppercase mb-2 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>New York Heart</h4>
+                  <p className={`transition-colors ${isDarkMode ? 'text-white/70' : 'text-upside-black/70'}`}>Born in the streets of NYC, we bring that authentic energy to every single pie we bake.</p>
                 </div>
               </div>
             </div>
@@ -308,32 +334,34 @@ export default function App() {
       </section>
 
       {/* Locations Section */}
-      <section id="locations" className="py-24 px-6 max-w-7xl mx-auto">
-        <h2 className="text-5xl md:text-7xl font-black uppercase text-center mb-16">Find <span className="text-upside-red">Us</span></h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {LOCATIONS.map((loc, i) => (
-            <motion.div 
-              key={loc.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-upside-offwhite border-2 border-upside-black p-8 rounded-3xl hover:bg-upside-black hover:text-white transition-all group"
-            >
-              <h3 className="text-3xl font-black uppercase mb-4">{loc.name}</h3>
-              <p className="mb-6 opacity-70 font-medium">{loc.address}</p>
-              <div className="flex items-center gap-2 text-sm font-display font-bold uppercase tracking-widest text-upside-red group-hover:text-upside-yellow">
-                <Clock className="w-4 h-4" /> {loc.hours}
-              </div>
-              <button className="mt-8 w-full border border-current py-3 rounded-xl font-display font-bold uppercase tracking-widest text-sm">
-                Get Directions
-              </button>
-            </motion.div>
-          ))}
+      <section id="locations" className={`py-24 px-6 transition-colors duration-500 ${isDarkMode ? 'bg-upside-black' : 'bg-upside-offwhite'}`}>
+        <div className="max-w-7xl mx-auto">
+          <h2 className={`text-5xl md:text-7xl font-black uppercase text-center mb-16 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Find <span className="text-upside-red dark:text-upside-yellow">Us</span></h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {LOCATIONS.map((loc, i) => (
+              <motion.div 
+                key={loc.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className={`p-8 rounded-3xl transition-all group border-2 ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-upside-yellow hover:text-upside-black' : 'bg-white border-upside-black hover:bg-upside-black hover:text-white'}`}
+              >
+                <h3 className="text-3xl font-black uppercase mb-4">{loc.name}</h3>
+                <p className="mb-6 opacity-70 font-medium">{loc.address}</p>
+                <div className={`flex items-center gap-2 text-sm font-display font-bold uppercase tracking-widest transition-colors ${isDarkMode ? 'text-upside-yellow group-hover:text-upside-black' : 'text-upside-red group-hover:text-upside-yellow'}`}>
+                  <Clock className="w-4 h-4" /> {loc.hours}
+                </div>
+                <button className="mt-8 w-full border border-current py-3 rounded-xl font-display font-bold uppercase tracking-widest text-sm">
+                  Get Directions
+                </button>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-24 px-6 bg-upside-red text-white overflow-hidden relative">
+      <section id="contact" className={`py-24 px-6 overflow-hidden relative transition-colors duration-500 ${isDarkMode ? 'bg-upside-black' : 'bg-upside-red'} text-white`}>
         <div className="absolute top-0 right-0 text-[20rem] font-black uppercase opacity-5 select-none pointer-events-none -translate-y-1/4 translate-x-1/4 leading-none">
           Contact
         </div>
@@ -348,7 +376,7 @@ export default function App() {
               
               <div className="space-y-8">
                 <div className="flex items-center gap-6 group cursor-pointer">
-                  <div className="bg-white/10 p-4 rounded-2xl group-hover:bg-upside-yellow group-hover:text-upside-black transition-colors">
+                  <div className={`p-4 rounded-2xl transition-colors ${isDarkMode ? 'bg-white/10 group-hover:bg-upside-yellow group-hover:text-upside-black' : 'bg-white/10 group-hover:bg-upside-yellow group-hover:text-upside-black'}`}>
                     <Mail className="w-8 h-8" />
                   </div>
                   <div>
@@ -358,7 +386,7 @@ export default function App() {
                 </div>
                 
                 <div className="flex items-center gap-6 group cursor-pointer">
-                  <div className="bg-white/10 p-4 rounded-2xl group-hover:bg-upside-yellow group-hover:text-upside-black transition-colors">
+                  <div className={`p-4 rounded-2xl transition-colors ${isDarkMode ? 'bg-white/10 group-hover:bg-upside-yellow group-hover:text-upside-black' : 'bg-white/10 group-hover:bg-upside-yellow group-hover:text-upside-black'}`}>
                     <Phone className="w-8 h-8" />
                   </div>
                   <div>
@@ -373,24 +401,24 @@ export default function App() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white p-10 rounded-[2.5rem] text-upside-black shadow-2xl"
+              className={`p-10 rounded-[2.5rem] shadow-2xl transition-colors ${isDarkMode ? 'bg-white/5 text-white' : 'bg-white text-upside-black'}`}
             >
               <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-display font-black uppercase tracking-widest opacity-50">Name</label>
-                    <input type="text" className="w-full bg-upside-offwhite border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-upside-red transition-all" placeholder="John Doe" />
+                    <input type="text" className={`w-full border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-upside-red transition-all ${isDarkMode ? 'bg-white/10 placeholder:text-white/30' : 'bg-upside-offwhite'}`} placeholder="John Doe" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-display font-black uppercase tracking-widest opacity-50">Email</label>
-                    <input type="email" className="w-full bg-upside-offwhite border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-upside-red transition-all" placeholder="john@example.com" />
+                    <input type="email" className={`w-full border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-upside-red transition-all ${isDarkMode ? 'bg-white/10 placeholder:text-white/30' : 'bg-upside-offwhite'}`} placeholder="john@example.com" />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs font-display font-black uppercase tracking-widest opacity-50">Message</label>
-                  <textarea rows={4} className="w-full bg-upside-offwhite border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-upside-red transition-all resize-none" placeholder="What's on your mind?"></textarea>
+                  <textarea rows={4} className={`w-full border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-upside-red transition-all resize-none ${isDarkMode ? 'bg-white/10 placeholder:text-white/30' : 'bg-upside-offwhite'}`} placeholder="What's on your mind?"></textarea>
                 </div>
-                <button className="w-full bg-upside-black text-white py-5 rounded-2xl font-display font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-upside-red transition-colors">
+                <button className={`w-full py-5 rounded-2xl font-display font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-colors ${isDarkMode ? 'bg-upside-yellow text-upside-black hover:bg-white' : 'bg-upside-black text-white hover:bg-upside-red'}`}>
                   Send Message <Send className="w-5 h-5" />
                 </button>
               </form>
