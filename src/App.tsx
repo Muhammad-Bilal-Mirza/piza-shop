@@ -52,14 +52,52 @@ const PIZZAS = [
 ];
 
 const LOCATIONS = [
-  { name: "Times Square", address: "598 8th Ave, New York, NY 10018", hours: "11AM - 2AM" },
-  { name: "Nolita", address: "51 Spring St, New York, NY 10012", hours: "11AM - 12AM" },
-  { name: "Williamsburg", address: "145 Bedford Ave, Brooklyn, NY 11211", hours: "11AM - 3AM" }
+  { 
+    name: "Greenpoint", 
+    address: "640 Manhattan Ave, Brooklyn, NY 11222", 
+    hours: ["Mon-Wed 11-11", "Thu 11-2AM", "Fri-Sat 11-4AM", "Sun 11-12AM"]
+  },
+  { 
+    name: "Midtown East", 
+    address: "20 East 40th Street, New York, NY 10016", 
+    hours: ["Mon-Fri 11-10", "Sat 11-11", "Sun 11-10"]
+  },
+  { 
+    name: "Nolita", 
+    address: "51 Spring Street, New York, NY 10012", 
+    hours: ["Mon-Wed 11-12AM", "Thu 11-2AM", "Fri-Sat 11-4AM", "Sun 11-12AM"]
+  },
+  { 
+    name: "Garment District", 
+    address: "598 8th Ave, New York, NY 10018", 
+    hours: ["Mon-Thu 11-12AM", "Fri 11-2AM", "Sat 11-3AM", "Sun 11-11"]
+  },
+  { 
+    name: "Chelsea", 
+    address: "555 6th Ave, New York, NY 10011", 
+    hours: ["Mon-Thu 11-11", "Fri-Sat 11-1AM", "Sun 11-10"]
+  },
+  { 
+    name: "Morningside Heights", 
+    address: "2878 Broadway, New York, NY 10025", 
+    hours: ["Mon-Wed 11-11", "Thu 11-12AM", "Fri-Sat 11-4AM", "Sun 11-11"]
+  },
+  { 
+    name: "NoMad", 
+    address: "1231 Broadway, New York, NY 10001", 
+    hours: ["Mon-Thu 11-12AM", "Fri-Sat 11-2AM", "Sun 11-11"]
+  },
+  { 
+    name: "Financial District", 
+    address: "63 WALL Street, New York, NY 10005", 
+    hours: ["Mon-Sun 11-9PM"]
+  }
 ];
 
 export default function App() {
   const containerRef = useRef(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showAllLocations, setShowAllLocations] = useState(false);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -338,7 +376,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <h2 className={`text-5xl md:text-7xl font-black uppercase text-center mb-16 transition-colors ${isDarkMode ? 'text-white' : 'text-upside-black'}`}>Find <span className="text-upside-red dark:text-upside-yellow">Us</span></h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {LOCATIONS.map((loc, i) => (
+            {LOCATIONS.slice(0, showAllLocations ? LOCATIONS.length : 3).map((loc, i) => (
               <motion.div 
                 key={loc.name}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -348,14 +386,35 @@ export default function App() {
               >
                 <h3 className="text-3xl font-black uppercase mb-4">{loc.name}</h3>
                 <p className="mb-6 opacity-70 font-medium">{loc.address}</p>
-                <div className={`flex items-center gap-2 text-sm font-display font-bold uppercase tracking-widest transition-colors ${isDarkMode ? 'text-upside-yellow group-hover:text-upside-black' : 'text-upside-red group-hover:text-upside-yellow'}`}>
-                  <Clock className="w-4 h-4" /> {loc.hours}
+                <div className={`flex flex-col gap-1 text-sm font-display font-bold uppercase tracking-widest transition-colors ${isDarkMode ? 'text-upside-yellow group-hover:text-upside-black' : 'text-upside-red group-hover:text-upside-yellow'}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Clock className="w-4 h-4" /> Hours:
+                  </div>
+                  {loc.hours.map((h, idx) => (
+                    <div key={idx} className="pl-6 opacity-80 text-[10px] sm:text-xs">{h}</div>
+                  ))}
                 </div>
                 <button className="mt-8 w-full border border-current py-3 rounded-xl font-display font-bold uppercase tracking-widest text-sm">
                   Get Directions
                 </button>
               </motion.div>
             ))}
+          </div>
+
+          <div className="mt-16 flex justify-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowAllLocations(!showAllLocations)}
+              className={`px-12 py-4 rounded-full font-display font-black uppercase tracking-widest text-sm transition-all shadow-xl flex items-center gap-3 ${
+                isDarkMode 
+                ? 'bg-upside-yellow text-upside-black hover:bg-white' 
+                : 'bg-upside-black text-white hover:bg-upside-red'
+              }`}
+            >
+              {showAllLocations ? 'Show Less' : 'See All Locations'}
+              <ChevronRight className={`w-5 h-5 transition-transform ${showAllLocations ? '-rotate-90' : 'rotate-90'}`} />
+            </motion.button>
           </div>
         </div>
       </section>
@@ -475,7 +534,7 @@ export default function App() {
           </div>
           
           <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-display font-bold uppercase tracking-[0.2em] opacity-40">
-            <span>© 2026 Upside Pizza. All Rights Reserved.</span>
+            <span>© 2026 Upside Pizza. All Rights Reserved. Built by <a href="http://YasinForge.rf.gd" target="_blank" rel="noopener noreferrer" className="hover:text-upside-yellow transition-colors">YasinForge</a></span>
             <div className="flex gap-8">
               <a href="#">Privacy Policy</a>
               <a href="#">Terms of Service</a>
